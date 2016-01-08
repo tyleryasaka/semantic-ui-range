@@ -1,5 +1,5 @@
 /*!
- * # Range slider for SemanticUI.
+ * # Range slider for Semantic UI.
  * 
  */
 
@@ -26,7 +26,6 @@
 	top: 8px;
 	left: 0;
 	background-color: rgba(0,0,0,.05);
-	transition: .25s;
 }
 
 .ui.inverted.range .inner .track {
