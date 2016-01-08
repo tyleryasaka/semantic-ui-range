@@ -4,13 +4,12 @@
  */
 
 .ui.range {
-	margin: 0 10px 0 10px;
 	width: 100%;
 	height: 20px;
 }
 
 .ui.range .inner {
-	width: 100%;
+	margin: 0 10px 0 10px;
 	height: 20px;
 	position: relative;
 }
@@ -22,8 +21,9 @@
 .ui.range .inner .track {
 	position: absolute;
 	width: 100%;
-	height: 3px;
-	top: 8px;
+	height: 4px;
+	border-radius: 4px;
+	top: 9px;
 	left: 0;
 	background-color: rgba(0,0,0,.05);
 }
@@ -35,8 +35,9 @@
 .ui.range .inner .track-left {
 	position: absolute;
 	width: 0;
-	height: 3px;
-	top: 8px;
+	height: 4px;
+	border-radius: 4px;
+	top: 9px;
 	left: 0;
 	background-color: #1b1c1d;
 }

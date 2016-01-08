@@ -12,7 +12,7 @@ $.fn.range = function(parameters) {
 	var
 		$allModules    = $(this),
 		
-		offsetCenter   = 10 // should be half of the size of the slider thumb
+		offset   = 10
 	;
 	
   $allModules
@@ -37,6 +37,10 @@ $.fn.range = function(parameters) {
 				element         = this,
 				instance        = $module.data(moduleNamespace),
 				
+				inner,
+				thumb,
+				trackLeft,
+				
 				module
 			;
 			
@@ -52,8 +56,11 @@ $.fn.range = function(parameters) {
 						.data(moduleNamespace, module)
 					;
 					$(element).html("<div class='inner'><div class='track'></div><div class='track-left'></div><div class='thumb'></div></div>");
+					inner = $(element).children('.inner')[0];
+					thumb = $(element).find('.thumb')[0];
+					trackLeft = $(element).find('.track-left')[0];
 					// set start location
-					var position = module.determinePosition($(element).width() - offsetCenter);
+					var position = module.determinePosition();
 					module.setPosition(position);
 					module.setValue(settings.start);
 					// event listeners
@@ -70,7 +77,7 @@ $.fn.range = function(parameters) {
 					$(element).on('mousedown', function(event, originalEvent) {
 						module.rangeMousedown(event, false, originalEvent);
 					});
-					$(range).on('touchstart', function(event, originalEvent) {
+					$(element).on('touchstart', function(event, originalEvent) {
 						module.rangeMousedown(event, true, originalEvent);
 					});
 				},
@@ -81,9 +88,9 @@ $.fn.range = function(parameters) {
 					return Math.round(ratio * range) + settings.min;
 				},
 
-				determinePosition: function(range) {
+				determinePosition: function() {
 					var ratio = (settings.start - settings.min) / (settings.max - settings.min);
-					return Math.round(ratio * range) + settings.min;
+					return Math.round(ratio * $(inner).width()) + $(trackLeft).position().left - offset;
 				},
 
 				setValue: function(value) {
@@ -95,22 +102,23 @@ $.fn.range = function(parameters) {
 				},
 
 				setPosition: function(value) {
-					$(element).find('.thumb').css({left: String(value) + 'px'});
-					$(element).find('.track-left').css({width: String(value) + 'px'});
+					$(thumb).css({left: String(value) + 'px'});
+					$(trackLeft).css({width: String(value + offset) + 'px'});
 				},
 
 				rangeMousedown: function(mdEvent, isTouch, originalEvent) {
 					mdEvent.preventDefault();
-					var dimensions = mdEvent.target.getBoundingClientRect();
+					var left = $(inner).offset().left;
+					var right = left + $(inner).width();
 					var pageX;
 					if(isTouch) {
 						pageX = originalEvent.originalEvent.touches[0].pageX;
 					} else {
 						pageX = (typeof mdEvent.pageX != 'undefined') ? mdEvent.pageX : originalEvent.pageX;
 					}
-					var value = module.determineValue(dimensions.left, dimensions.right, pageX);
+					var value = module.determineValue(left, right, pageX);
 					if(value >= settings.min && value <= settings.max) {
-						module.setPosition(pageX - dimensions.left - offsetCenter);
+						module.setPosition(pageX - left - offset);
 						$(document).css({cursor: 'pointer'});
 						module.setValue(value);
 						var rangeMousemove = function(mmEvent) {
@@ -120,10 +128,10 @@ $.fn.range = function(parameters) {
 							} else {
 								pageX = mmEvent.pageX;
 							}
-							value = module.determineValue(dimensions.left, dimensions.right, pageX);
-							if( pageX >= dimensions.left && pageX <= dimensions.right) {
+							value = module.determineValue(left, right, pageX);
+							if( pageX >= left && pageX <= right) {
 								if(value >= settings.min && value <= settings.max) {
-									module.setPosition(pageX - dimensions.left - offsetCenter);
+									module.setPosition(pageX - left - offset);
 									module.setValue(value);
 								}
 							}
