@@ -32,7 +32,7 @@
 	background-color: rgba(255,255,255,.08);
 }
 
-.ui.range .inner .track-left {
+.ui.range .inner .track-fill {
 	position: absolute;
 	width: 0;
 	height: 4px;
@@ -42,7 +42,7 @@
 	background-color: #1b1c1d;
 }
 
-.ui.inverted.range .inner .track-left {
+.ui.inverted.range .inner .track-fill {
 	background-color: #545454;
 }
 
@@ -65,105 +65,120 @@
 ---------------*/
 
 /* Red */
-.ui.red.range .inner .track-left {
+.ui.red.range .inner .track-fill {
 	background-color: #DB2828;
 }
-.ui.red.inverted.range .inner .track-left {
+.ui.red.inverted.range .inner .track-fill {
 	background-color: #FF695E;
 }
 
 /* Orange */
-.ui.orange.range .inner .track-left {
+.ui.orange.range .inner .track-fill {
 	background-color: #F2711C;
 }
-.ui.orange.inverted.range .inner .track-left {
+.ui.orange.inverted.range .inner .track-fill {
 	background-color: #FF851B;
 }
 
 /* Yellow */
-.ui.yellow.range .inner .track-left {
+.ui.yellow.range .inner .track-fill {
 	background-color: #FBBD08;
 }
-.ui.yellow.inverted.range .inner .track-left {
+.ui.yellow.inverted.range .inner .track-fill {
 	background-color: #FFE21F;
 }
 
 /* Olive */
-.ui.olive.range .inner .track-left {
+.ui.olive.range .inner .track-fill {
 	background-color: #B5CC18;
 }
-.ui.olive.inverted.range .inner .track-left {
+.ui.olive.inverted.range .inner .track-fill {
 	background-color: #D9E778;
 }
 
 /* Green */
-.ui.green.range .inner .track-left {
+.ui.green.range .inner .track-fill {
 	background-color: #21BA45;
 }
-.ui.green.inverted.range .inner .track-left {
+.ui.green.inverted.range .inner .track-fill {
 	background-color: #2ECC40;
 }
 
 /* Teal */
-.ui.teal.range .inner .track-left {
+.ui.teal.range .inner .track-fill {
 	background-color: #00B5AD;
 }
-.ui.teal.inverted.range .inner .track-left {
+.ui.teal.inverted.range .inner .track-fill {
 	background-color: #6DFFFF;
 }
 
 /* Blue */
-.ui.blue.range .inner .track-left {
+.ui.blue.range .inner .track-fill {
 	background-color: #2185D0;
 }
-.ui.blue.inverted.range .inner .track-left {
+.ui.blue.inverted.range .inner .track-fill {
 	background-color: #54C8FF;
 }
 
 /* Violet */
-.ui.violet.range .inner .track-left {
+.ui.violet.range .inner .track-fill {
 	background-color: #6435C9;
 }
-.ui.violet.inverted.range .inner .track-left {
+.ui.violet.inverted.range .inner .track-fill {
 	background-color: #A291FB;
 }
 
 /* Purple */
-.ui.purple.range .inner .track-left {
+.ui.purple.range .inner .track-fill {
 	background-color: #A333C8;
 }
-.ui.purple.inverted.range .inner .track-left {
+.ui.purple.inverted.range .inner .track-fill {
 	background-color: #DC73FF;
 }
 
 /* Pink */
-.ui.pink.range .inner .track-left {
+.ui.pink.range .inner .track-fill {
 	background-color: #E03997;
 }
-.ui.pink.inverted.range .inner .track-left {
+.ui.pink.inverted.range .inner .track-fill {
 	background-color: #FF8EDF;
 }
 
 /* Brown */
-.ui.brown.range .inner .track-left {
+.ui.brown.range .inner .track-fill {
 	background-color: #A5673F;
 }
-.ui.brown.inverted.range .inner .track-left {
+.ui.brown.inverted.range .inner .track-fill {
 	background-color: #D67C1C;
 }
 
 /* Grey */
-.ui.grey.range .inner .track-left {
+.ui.grey.range .inner .track-fill {
 	background-color: #767676;
 }
-.ui.grey.inverted.range .inner .track-left {
+.ui.grey.inverted.range .inner .track-fill {
 	background-color: #DCDDDE;
 }
 
 /* Black */
-.ui.black.range .inner .track-left {
+.ui.black.range .inner .track-fill {
 	background-color: #1b1c1d;
 }
-.ui.black.inverted.range .inner .track-left {
+.ui.black.inverted.range .inner .track-fill {
 	background-color: #545454;
+}
+
+/*--------------
+    Disabled
+---------------*/
+.ui.range.disabled {
+	opacity: .5;
+}
+
+.ui.range.disabled .inner:hover {
+	cursor: auto;
+}
+
+.ui.range.disabled .inner .track-fill {
+	background: #ccc;
 }

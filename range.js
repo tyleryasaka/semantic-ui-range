@@ -55,10 +55,10 @@ $.fn.range = function(parameters) {
 					$module
 						.data(moduleNamespace, module)
 					;
-					$(element).html("<div class='inner'><div class='track'></div><div class='track-left'></div><div class='thumb'></div></div>");
+					$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div></div>");
 					inner = $(element).children('.inner')[0];
 					thumb = $(element).find('.thumb')[0];
-					trackLeft = $(element).find('.track-left')[0];
+					trackLeft = $(element).find('.track-fill')[0];
 					// set start location
 					var position = module.determinePosition();
 					module.setPosition(position);
@@ -107,52 +107,54 @@ $.fn.range = function(parameters) {
 				},
 
 				rangeMousedown: function(mdEvent, isTouch, originalEvent) {
-					mdEvent.preventDefault();
-					var left = $(inner).offset().left;
-					var right = left + $(inner).width();
-					var pageX;
-					if(isTouch) {
-						pageX = originalEvent.originalEvent.touches[0].pageX;
-					} else {
-						pageX = (typeof mdEvent.pageX != 'undefined') ? mdEvent.pageX : originalEvent.pageX;
-					}
-					var value = module.determineValue(left, right, pageX);
-					if(value >= settings.min && value <= settings.max) {
-						module.setPosition(pageX - left - offset);
-						$(document).css({cursor: 'pointer'});
-						module.setValue(value);
-						var rangeMousemove = function(mmEvent) {
-							mmEvent.preventDefault();
-							if(isTouch) {
-								pageX = mmEvent.originalEvent.touches[0].pageX;
-							} else {
-								pageX = mmEvent.pageX;
-							}
-							value = module.determineValue(left, right, pageX);
-							if( pageX >= left && pageX <= right) {
-								if(value >= settings.min && value <= settings.max) {
-									module.setPosition(pageX - left - offset);
-									module.setValue(value);
+					if( !$(element).hasClass('disabled') ) {
+						mdEvent.preventDefault();
+						var left = $(inner).offset().left;
+						var right = left + $(inner).width();
+						var pageX;
+						if(isTouch) {
+							pageX = originalEvent.originalEvent.touches[0].pageX;
+						} else {
+							pageX = (typeof mdEvent.pageX != 'undefined') ? mdEvent.pageX : originalEvent.pageX;
+						}
+						var value = module.determineValue(left, right, pageX);
+						if(value >= settings.min && value <= settings.max) {
+							module.setPosition(pageX - left - offset);
+							$(document).css({cursor: 'pointer'});
+							module.setValue(value);
+							var rangeMousemove = function(mmEvent) {
+								mmEvent.preventDefault();
+								if(isTouch) {
+									pageX = mmEvent.originalEvent.touches[0].pageX;
+								} else {
+									pageX = mmEvent.pageX;
+								}
+								value = module.determineValue(left, right, pageX);
+								if( pageX >= left && pageX <= right) {
+									if(value >= settings.min && value <= settings.max) {
+										module.setPosition(pageX - left - offset);
+										module.setValue(value);
+									}
 								}
 							}
-						}
-						var rangeMouseup = function(muEvent) {
-							$(document).css({cursor: 'auto'});
-							if(isTouch) {
-								$(document).off('touchmove', rangeMousemove);
-								$(document).off('touchend', rangeMouseup);
-							} else {
-								$(document).off('mousemove', rangeMousemove);
-								$(document).off('mouseup', rangeMouseup);
+							var rangeMouseup = function(muEvent) {
+								$(document).css({cursor: 'auto'});
+								if(isTouch) {
+									$(document).off('touchmove', rangeMousemove);
+									$(document).off('touchend', rangeMouseup);
+								} else {
+									$(document).off('mousemove', rangeMousemove);
+									$(document).off('mouseup', rangeMouseup);
+								}
 							}
-						}
-						if(isTouch) {
-							$(document).on('touchmove', rangeMousemove);
-							$(document).on('touchend', rangeMouseup);
-						}
-						else {
-							$(document).on('mousemove', rangeMousemove);
-							$(document).on('mouseup', rangeMouseup);
+							if(isTouch) {
+								$(document).on('touchmove', rangeMousemove);
+								$(document).on('touchend', rangeMouseup);
+							}
+							else {
+								$(document).on('mousemove', rangeMousemove);
+								$(document).on('mouseup', rangeMouseup);
+							}
 						}
 					}
 				}
