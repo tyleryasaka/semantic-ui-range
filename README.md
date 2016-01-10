@@ -9,15 +9,17 @@ The range slider is responsive and works for both mouse and touchscreen on all t
 
 To use these ranges, just add the range.js and range.css files in this repo to your project. To create a range instance, you'll need to do 2 things. First, the HTML:
 
-		<div class="ui range" id="my-range"></div>
+	<div class="ui range" id="my-range"></div>
 
 Then you'll need to instantiate it with jQuery:
 
+	$(document).ready(function() {
 		$('#my-range').range({
 			min: 0,
 			max: 10,
 			start: 5
 		});
+	});
 
 And that's it. Notice the settings object you pass into the jQuery function. There are 5 settings you can pass in:
 * min - the lowest value (inclusive) of the range
