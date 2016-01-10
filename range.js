@@ -26,6 +26,7 @@ $.fn.range = function(parameters) {
 				namespace       = settings.namespace,
 				min             = settings.min,
 				max             = settings.max,
+				step            = settings.step,
 				start           = settings.start,
 				input           = settings.input,
 
@@ -40,6 +41,7 @@ $.fn.range = function(parameters) {
 				inner,
 				thumb,
 				trackLeft,
+				precision,
 				
 				module
 			;
@@ -59,6 +61,8 @@ $.fn.range = function(parameters) {
 					inner = $(element).children('.inner')[0];
 					thumb = $(element).find('.thumb')[0];
 					trackLeft = $(element).find('.track-fill')[0];
+					// find precision of step, used in calculating the value
+					module.determinePrecision();
 					// set start location
 					var position = module.determinePosition();
 					module.setPosition(position);
@@ -82,10 +86,25 @@ $.fn.range = function(parameters) {
 					});
 				},
 				
+				determinePrecision: function() {
+					var split = String(settings.step).split('.');
+					var decimalPlaces;
+					if(split.length == 2) {
+						decimalPlaces = split[1].length;
+					} else {
+						decimalPlaces = 0;
+					}
+					precision = Math.pow(10, decimalPlaces);
+				},
+				
 				determineValue: function(startPos, endPos, currentPos) {
 					var ratio = (currentPos - startPos) / (endPos - startPos);
 					var range = settings.max - settings.min;
-					return Math.round(ratio * range) + settings.min;
+					var difference = Math.round(ratio * range / step) * step;
+					// Use precision to avoid ugly Javascript floating point rounding issues
+					// (like 35 * .01 = 0.35000000000000003)
+					difference = Math.round(difference * precision) / precision;
+					return difference + settings.min;
 				},
 
 				determinePosition: function() {
@@ -120,7 +139,6 @@ $.fn.range = function(parameters) {
 						var value = module.determineValue(left, right, pageX);
 						if(value >= settings.min && value <= settings.max) {
 							module.setPosition(pageX - left - offset);
-							$(document).css({cursor: 'pointer'});
 							module.setValue(value);
 							var rangeMousemove = function(mmEvent) {
 								mmEvent.preventDefault();
@@ -138,7 +156,6 @@ $.fn.range = function(parameters) {
 								}
 							}
 							var rangeMouseup = function(muEvent) {
-								$(document).css({cursor: 'auto'});
 								if(isTouch) {
 									$(document).off('touchmove', rangeMousemove);
 									$(document).off('touchend', rangeMouseup);
@@ -177,6 +194,7 @@ $.fn.range.settings = {
 
 	min          : 0,
 	max          : false,
+	step         : 1,
 	start        : 0,
 	input        : false,
 	
