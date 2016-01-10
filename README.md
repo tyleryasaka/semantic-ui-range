@@ -21,7 +21,7 @@ Then you'll need to instantiate it with jQuery:
 		});
 	});
 
-And that's it. Notice the settings object you pass into the jQuery function. There are 5 settings you can pass in:
+And that's it. Notice the settings object you pass into the jQuery function. There are 6 settings you can pass in:
 * min - the lowest value (inclusive) of the range
 * max - the highest value (inclusive) of the range
 * start (optional) - the initial value of the range (must be between min and max)
