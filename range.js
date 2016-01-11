@@ -115,7 +115,8 @@ $.fn.range = function(parameters) {
 				setValue: function(value) {
 					if(settings.input) {
 						$(settings.input).val(value);
-					} else {
+					}
+					if(settings.onChange) {
 						settings.onChange(value);
 					}
 				},
