@@ -12,7 +12,11 @@ $.fn.range = function(parameters) {
 	var
 		$allModules    = $(this),
 		
-		offset   = 10
+		offset         = 10,
+		
+		query          = arguments[0],
+    methodInvoked  = (typeof query == 'string'),
+    queryArguments = [].slice.call(arguments, 1)
 	;
 	
   $allModules
@@ -64,9 +68,7 @@ $.fn.range = function(parameters) {
 					// find precision of step, used in calculating the value
 					module.determinePrecision();
 					// set start location
-					var position = module.determinePosition();
-					module.setPosition(position);
-					module.setValue(settings.start);
+					module.setValuePosition(settings.start);
 					// event listeners
 					$(element).find('.track, .thumb, .inner').on('mousedown', function(event) {
 						event.stopImmediatePropagation();
@@ -107,17 +109,17 @@ $.fn.range = function(parameters) {
 					return difference + settings.min;
 				},
 
-				determinePosition: function() {
-					var ratio = (settings.start - settings.min) / (settings.max - settings.min);
+				determinePosition: function(value) {
+					var ratio = (value - settings.min) / (settings.max - settings.min);
 					return Math.round(ratio * $(inner).width()) + $(trackLeft).position().left - offset;
 				},
 
-				setValue: function(value) {
+				setValue: function(newValue) {
 					if(settings.input) {
-						$(settings.input).val(value);
+						$(settings.input).val(newValue);
 					}
 					if(settings.onChange) {
-						settings.onChange(value);
+						settings.onChange(newValue);
 					}
 				},
 
@@ -175,11 +177,35 @@ $.fn.range = function(parameters) {
 							}
 						}
 					}
-				}
+				},
+				
+				setValuePosition: function(val) {
+					var position = module.determinePosition(val);
+					module.setPosition(position);
+					module.setValue(val);
+				},
+				
+				invoke: function(query) {
+					switch(query) {
+						case 'setValue':
+							if(queryArguments.length > 0) {
+								instance.setValuePosition(queryArguments[0]);
+							}
+							break;
+					}
+				},
 			
 			};
-
-			module.initialize();
+			
+      if(methodInvoked) {
+        if(instance === undefined) {
+          module.initialize();
+        }
+        module.invoke(query);
+      }
+      else {
+        module.initialize();
+      }
 			
     })
   ;
