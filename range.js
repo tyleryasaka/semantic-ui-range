@@ -187,7 +187,7 @@ $.fn.range = function(parameters) {
 				
 				invoke: function(query) {
 					switch(query) {
-						case 'setValue':
+						case 'set value':
 							if(queryArguments.length > 0) {
 								instance.setValuePosition(queryArguments[0]);
 							}

@@ -58,7 +58,7 @@ Use the `onChange` callback in the configuration options. For example:
 
 You may also set the slider value with jQuery using the 'setValue' query like so:
 
-    $('#range').range('setValue', 17); // Sets slider with id 'range' to value 17
+    $('#range').range('set value', 17); // Sets slider with id 'range' to value 17
 
 Note that this will only work on a slider that has already been instantiated.
 
