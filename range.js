@@ -140,43 +140,41 @@ $.fn.range = function(parameters) {
 							pageX = (typeof mdEvent.pageX != 'undefined') ? mdEvent.pageX : originalEvent.pageX;
 						}
 						var value = module.determineValue(left, right, pageX);
-						if(value >= settings.min && value <= settings.max) {
-							if(pageX >= left && pageX <= right) {
-								module.setPosition(pageX - left - offset);
-								module.setValue(value);
-							}
-							var rangeMousemove = function(mmEvent) {
-								mmEvent.preventDefault();
-								if(isTouch) {
-									pageX = mmEvent.originalEvent.touches[0].pageX;
-								} else {
-									pageX = mmEvent.pageX;
-								}
-								value = module.determineValue(left, right, pageX);
-								if(pageX >= left && pageX <= right) {
-									if(value >= settings.min && value <= settings.max) {
-										module.setPosition(pageX - left - offset);
-										module.setValue(value);
-									}
-								}
-							}
-							var rangeMouseup = function(muEvent) {
-								if(isTouch) {
-									$(document).off('touchmove', rangeMousemove);
-									$(document).off('touchend', rangeMouseup);
-								} else {
-									$(document).off('mousemove', rangeMousemove);
-									$(document).off('mouseup', rangeMouseup);
-								}
-							}
+						if(pageX >= left && pageX <= right) {
+							module.setPosition(pageX - left - offset);
+							module.setValue(value);
+						}
+						var rangeMousemove = function(mmEvent) {
+							mmEvent.preventDefault();
 							if(isTouch) {
-								$(document).on('touchmove', rangeMousemove);
-								$(document).on('touchend', rangeMouseup);
+								pageX = mmEvent.originalEvent.touches[0].pageX;
+							} else {
+								pageX = mmEvent.pageX;
 							}
-							else {
-								$(document).on('mousemove', rangeMousemove);
-								$(document).on('mouseup', rangeMouseup);
+							value = module.determineValue(left, right, pageX);
+							if(pageX >= left && pageX <= right) {
+								if(value >= settings.min && value <= settings.max) {
+									module.setPosition(pageX - left - offset);
+									module.setValue(value);
+								}
 							}
+						}
+						var rangeMouseup = function(muEvent) {
+							if(isTouch) {
+								$(document).off('touchmove', rangeMousemove);
+								$(document).off('touchend', rangeMouseup);
+							} else {
+								$(document).off('mousemove', rangeMousemove);
+								$(document).off('mouseup', rangeMouseup);
+							}
+						}
+						if(isTouch) {
+							$(document).on('touchmove', rangeMousemove);
+							$(document).on('touchend', rangeMouseup);
+						}
+						else {
+							$(document).on('mousemove', rangeMousemove);
+							$(document).on('mouseup', rangeMouseup);
 						}
 					}
 				},
