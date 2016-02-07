@@ -141,8 +141,10 @@ $.fn.range = function(parameters) {
 						}
 						var value = module.determineValue(left, right, pageX);
 						if(value >= settings.min && value <= settings.max) {
-							module.setPosition(pageX - left - offset);
-							module.setValue(value);
+							if(pageX >= left && pageX <= right) {
+								module.setPosition(pageX - left - offset);
+								module.setValue(value);
+							}
 							var rangeMousemove = function(mmEvent) {
 								mmEvent.preventDefault();
 								if(isTouch) {
@@ -151,7 +153,7 @@ $.fn.range = function(parameters) {
 									pageX = mmEvent.pageX;
 								}
 								value = module.determineValue(left, right, pageX);
-								if( pageX >= left && pageX <= right) {
+								if(pageX >= left && pageX <= right) {
 									if(value >= settings.min && value <= settings.max) {
 										module.setPosition(pageX - left - offset);
 										module.setValue(value);
