@@ -54,7 +54,7 @@
 	width: 20px;
 	background: #fff linear-gradient(transparent, rgba(0, 0, 0, 0.05));
 	background: #fff -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
-	background: #fff-o-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+	background: #fff -o-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
 	background: #fff -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
 	border-radius: 100%;
 	box-shadow: 0 1px 2px 0 rgba(34,36,38,.15),0 0 0 1px rgba(34,36,38,.15) inset;
