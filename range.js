@@ -91,13 +91,13 @@ $.fn.range = function(parameters) {
 
 				sanitize: function() {
 					if (typeof settings.min != 'number') {
-						settings.min = parseInt(settings.min);
+						settings.min = parseInt(settings.min) || 0;
 					}
 					if (typeof settings.max != 'number') {
-						settings.max = parseInt(settings.max);
+						settings.max = parseInt(settings.max) || false;
 					}
 					if (typeof settings.start != 'number') {
-						settings.start = parseInt(settings.start);
+						settings.start = parseInt(settings.start) || 0;
 					}
 				},
 
