@@ -28,10 +28,10 @@ $.fn.range = function(parameters) {
 					: $.extend({}, $.fn.range.settings),
 
 				namespace       = settings.namespace,
-				min             = parseInt(settings.min),
-				max             = parseInt(settings.max),
+				min             = settings.min,
+				max             = settings.max,
 				step            = settings.step,
-				start           = parseInt(settings.start),
+				start           = settings.start,
 				input           = settings.input,
 
 				eventNamespace  = '.' + namespace,
