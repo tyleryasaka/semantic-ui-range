@@ -28,10 +28,10 @@ $.fn.range = function(parameters) {
 					: $.extend({}, $.fn.range.settings),
 
 				namespace       = settings.namespace,
-				min             = settings.min,
-				max             = settings.max,
+				min             = parseInt(settings.min),
+				max             = parseInt(settings.max),
 				step            = settings.step,
-				start           = settings.start,
+				start           = parseInt(settings.start),
 				input           = settings.input,
 
 				eventNamespace  = '.' + namespace,
@@ -54,6 +54,7 @@ $.fn.range = function(parameters) {
 				
 				initialize: function() {
 					module.instantiate();
+					module.sanitize();
 				},
 				
 				instantiate: function() {
@@ -87,7 +88,19 @@ $.fn.range = function(parameters) {
 						module.rangeMousedown(event, true, originalEvent);
 					});
 				},
-				
+
+				sanitize: function() {
+					if (typeof settings.min != 'number') {
+						settings.min = parseInt(settings.min);
+					}
+					if (typeof settings.max != 'number') {
+						settings.max = parseInt(settings.max);
+					}
+					if (typeof settings.start != 'number') {
+						settings.start = parseInt(settings.start);
+					}
+				},
+
 				determinePrecision: function() {
 					var split = String(settings.step).split('.');
 					var decimalPlaces;
