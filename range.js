@@ -54,6 +54,7 @@ $.fn.range = function(parameters) {
 				
 				initialize: function() {
 					module.instantiate();
+					module.sanitize();
 				},
 				
 				instantiate: function() {
@@ -87,7 +88,19 @@ $.fn.range = function(parameters) {
 						module.rangeMousedown(event, true, originalEvent);
 					});
 				},
-				
+
+				sanitize: function() {
+					if (typeof settings.min != 'number') {
+						settings.min = parseInt(settings.min) || 0;
+					}
+					if (typeof settings.max != 'number') {
+						settings.max = parseInt(settings.max) || false;
+					}
+					if (typeof settings.start != 'number') {
+						settings.start = parseInt(settings.start) || 0;
+					}
+				},
+
 				determinePrecision: function() {
 					var split = String(settings.step).split('.');
 					var decimalPlaces;
