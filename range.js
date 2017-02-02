@@ -136,13 +136,23 @@ $.fn.range = function(parameters) {
 					//
 					if (values) {
 						if (typeof settings.values[0] != 'number' || typeof settings.values[1] !== 'number') {
-							settings.values[0] = parseInt(settings.values[0]) || 0;
+							settings.values[0] = parseInt(settings.values[0]) || false;
 							settings.values[1] = parseInt(settings.values[1]) || false;
+							if (settings.values[0] === false || settings.values[1] === false) {
+								settings.values = false;
+								console.log("Invalid value input");
+							}
 						}
 						if (settings.start.length && settings.start[0] !== 'number' ||
 								settings.start[1] !== 'number') {
 							settings.start[0] = parseInt(settings.start[0]) || settings.values[0];
 							settings.start[1] = parseInt(settings.start[1]) || settings.values[1];
+							if (settings.start[0] === false || settings.start[1] === false) {
+								settings.start = false;
+							} else if (settings.start[0] > settings.start[1]) {
+								settings.start = false;
+								console.log("Invalid start array input");
+							}
 						}
 					} else {
 						if (typeof settings.min != 'number') {
@@ -213,7 +223,6 @@ $.fn.range = function(parameters) {
 						if (ctrl === rthumb) {
 							rthumbpos = value;
 						} else {
-							console.log(rthumbpos);
 							thumbpos = value;
 						}
 						$(ctrl).css({left: String(value) + 'px'});
