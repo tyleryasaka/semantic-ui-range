@@ -21,7 +21,6 @@ $.fn.range = function(parameters) {
 	
   $allModules
     .each(function() {
-			
 			var
 				settings          = ( $.isPlainObject(parameters) )
 					? $.extend(true, {}, $.fn.range.settings, parameters)
@@ -33,6 +32,7 @@ $.fn.range = function(parameters) {
 				step            = settings.step,
 				start           = settings.start,
 				input           = settings.input,
+				values 			= settings.values,
 
 				eventNamespace  = '.' + namespace,
 				moduleNamespace = 'module-' + namespace,
@@ -44,17 +44,23 @@ $.fn.range = function(parameters) {
 				
 				inner,
 				thumb,
+				rthumb,
+				thumbpos,
+				rthumbpos,
+				thumbval,
+				rthumbval,
 				trackLeft,
 				precision,
-				
 				module
 			;
-			
 			module = {
 				
 				initialize: function() {
-					module.instantiate();
 					module.sanitize();
+					module.instantiate();
+					$(window).resize(function() {
+						module.instantiate();
+					});
 				},
 				
 				instantiate: function() {
@@ -62,45 +68,95 @@ $.fn.range = function(parameters) {
 					$module
 						.data(moduleNamespace, module)
 					;
-					$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div></div>");
-					inner = $(element).children('.inner')[0];
-					thumb = $(element).find('.thumb')[0];
-					trackLeft = $(element).find('.track-fill')[0];
-					// find precision of step, used in calculating the value
-					module.determinePrecision();
-					// set start location
-					module.setValuePosition(settings.start);
-					// event listeners
-					$(element).find('.track, .thumb, .inner').on('mousedown', function(event) {
-						event.stopImmediatePropagation();
-						event.preventDefault();
-						$(this).closest(".range").trigger('mousedown', event);
-					});
-					$(element).find('.track, .thumb, .inner').on('touchstart', function(event) {
-						event.stopImmediatePropagation();
-						event.preventDefault();
-						$(this).closest(".range").trigger('touchstart', event);
-					});
-					$(element).on('mousedown', function(event, originalEvent) {
-						module.rangeMousedown(event, false, originalEvent);
-					});
-					$(element).on('touchstart', function(event, originalEvent) {
-						module.rangeMousedown(event, true, originalEvent);
-					});
+					if (settings.values) {
+						$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div><div class='thumb'></div></div>");
+						inner = $(element).children('.inner')[0];
+						thumb = $(element).find('.thumb')[0];
+						rthumb = $(element).find('.thumb')[1];
+						trackLeft = $(element).find('.track-fill')[0];
+						// find precision of step, used in calculating the value
+						module.determinePrecision();
+						// set start location
+						if (settings.start.length) {
+							if (settings.start[0] >= settings.values[0] && settings.start[0] <= settings.values[1]
+								&& settings.start[1] >= settings.values[0] && settings.start[1] <= settings.values[1]) {
+								thumbval = settings.start[0];
+								rthumbval = settings.start[1];
+							} else {
+								thumbval = settings.values[0];
+								rthumbval = settings.values[1];
+							}
+						}
+						settings.min = settings.values[0];
+						settings.max = settings.values[1];	
+						module.setValuePosition(thumbval, thumb);
+						module.setValuePosition(rthumbval, rthumb);
+						$(thumb).on('mousedown', function(event, originalEvent) {
+							module.rangeMousedown(event, false, originalEvent, thumb);
+						});
+						$(thumb).on('touchstart', function(event, originalEvent) {
+							module.rangeMousedown(event, true, originalEvent, thumb);
+						});
+						$(rthumb).on('mousedown', function(event, originalEvent) {
+							module.rangeMousedown(event, false, originalEvent, rthumb);
+						});
+						$(rthumb).on('touchstart', function(event, originalEvent) {
+							module.rangeMousedown(event, true, originalEvent, rthumb);
+						});
+					} else {
+						$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div></div>");
+						thumb = $(element).find('.thumb')[0];
+						inner = $(element).children('.inner')[0];
+						trackLeft = $(element).find('.track-fill')[0];
+						// find precision of step, used in calculating the value
+						module.determinePrecision();
+						// set start location
+						module.setValuePosition(settings.start, thumb);
+						// event listeners
+						$(element).find('.track, .thumb, .inner').on('mousedown', function(event) {
+							event.stopImmediatePropagation();
+							event.preventDefault();
+							$(this).closest(".range").trigger('mousedown', event);
+						});
+						$(element).find('.track, .thumb, .inner').on('touchstart', function(event) {
+							event.stopImmediatePropagation();
+							event.preventDefault();
+							$(this).closest(".range").trigger('touchstart', event);
+						});
+						$(element).on('mousedown', function(event, originalEvent) {
+							module.rangeMousedown(event, false, originalEvent, thumb);
+						});
+						$(element).on('touchstart', function(event, originalEvent) {
+							module.rangeMousedown(event, true, originalEvent, thumb);
+						});
+					}
 				},
 
 				sanitize: function() {
-					if (typeof settings.min != 'number') {
-						settings.min = parseInt(settings.min) || 0;
-					}
-					if (typeof settings.max != 'number') {
-						settings.max = parseInt(settings.max) || false;
-					}
-					if (typeof settings.start != 'number') {
-						settings.start = parseInt(settings.start) || 0;
+					//
+					if (values) {
+						if (typeof settings.values[0] != 'number' || typeof settings.values[1] !== 'number') {
+							settings.values[0] = parseInt(settings.values[0]) || 0;
+							settings.values[1] = parseInt(settings.values[1]) || false;
+						}
+						if (settings.start.length && settings.start[0] !== 'number' ||
+								settings.start[1] !== 'number') {
+							settings.start[0] = parseInt(settings.start[0]) || settings.values[0];
+							settings.start[1] = parseInt(settings.start[1]) || settings.values[1];
+						}
+					} else {
+						if (typeof settings.min != 'number') {
+							settings.min = parseInt(settings.min) || 0;
+						}
+						if (typeof settings.max != 'number') {
+							settings.max = parseInt(settings.max) || false;
+						}
+						if (typeof settings.start != 'number') {
+							settings.start = parseInt(settings.start) || 0;
+						}
 					}
 				},
-
+ 
 				determinePrecision: function() {
 					var split = String(settings.step).split('.');
 					var decimalPlaces;
@@ -115,6 +171,7 @@ $.fn.range = function(parameters) {
 				determineValue: function(startPos, endPos, currentPos) {
 					var ratio = (currentPos - startPos) / (endPos - startPos);
 					var range = settings.max - settings.min;
+
 					var difference = Math.round(ratio * range / step) * step;
 					// Use precision to avoid ugly Javascript floating point rounding issues
 					// (like 35 * .01 = 0.35000000000000003)
@@ -122,26 +179,55 @@ $.fn.range = function(parameters) {
 					return difference + settings.min;
 				},
 
-				determinePosition: function(value) {
+				determinePosition: function(value, ctrl) {
 					var ratio = (value - settings.min) / (settings.max - settings.min);
-					return Math.round(ratio * $(inner).width()) + $(trackLeft).position().left - offset;
+					//Don't bother with trackLeft position when setting position of right thumb
+					if (ctrl === rthumb) {
+						return Math.round(ratio * $(inner).width());
+					} else {
+						return Math.round(ratio * $(inner).width()) + $(trackLeft).position().left - offset;
+					}
 				},
 
 				setValue: function(newValue) {
 					if(settings.input) {
 						$(settings.input).val(newValue);
 					}
-					if(settings.onChange) {
+					if(settings.onChange && settings.values) {
+						settings.onChange(thumbval, rthumbval);
+					} else if (settings.onChange) {
 						settings.onChange(newValue);
 					}
 				},
 
-				setPosition: function(value) {
-					$(thumb).css({left: String(value) + 'px'});
-					$(trackLeft).css({width: String(value + offset) + 'px'});
+				getValue: function(cb) {
+					if (settings.values) {
+						cb([thumbval, rthumbval]);
+					} else {
+						cb(thumbval);
+					}
 				},
 
-				rangeMousedown: function(mdEvent, isTouch, originalEvent) {
+				setPosition: function(value, ctrl) {
+					if (settings.values) {
+						if (ctrl === rthumb) {
+							rthumbpos = value;
+						} else {
+							console.log(rthumbpos);
+							thumbpos = value;
+						}
+						$(ctrl).css({left: String(value) + 'px'});
+						$(trackLeft).css({
+							left: String(thumbpos + offset) + 'px', 
+							width: String(rthumbpos + offset - thumbpos) + 'px'
+						});
+					} else {
+						$(ctrl).css({left: String(value) + 'px'});
+						$(trackLeft).css({width: String(value + offset) + 'px'});
+					}
+				},
+
+				rangeMousedown: function(mdEvent, isTouch, originalEvent, ctrl) {
 					if( !$(element).hasClass('disabled') ) {
 						mdEvent.preventDefault();
 						var left = $(inner).offset().left;
@@ -154,7 +240,12 @@ $.fn.range = function(parameters) {
 						}
 						var value = module.determineValue(left, right, pageX);
 						if(pageX >= left && pageX <= right) {
-							module.setPosition(pageX - left - offset);
+							module.setPosition(pageX - left - offset, ctrl);
+							if (ctrl === rthumb) {
+								rthumbval = value;
+							} else {
+								thumbval = value;
+							}
 							module.setValue(value);
 						}
 						var rangeMousemove = function(mmEvent) {
@@ -166,11 +257,30 @@ $.fn.range = function(parameters) {
 							}
 							value = module.determineValue(left, right, pageX);
 							if(pageX >= left && pageX <= right) {
-								if(value >= settings.min && value <= settings.max) {
-									module.setPosition(pageX - left - offset);
-									module.setValue(value);
+								if (ctrl === rthumb) {
+									rthumbval = value;
+								} else {
+									thumbval = value;
 								}
-							}
+								module.setPosition(pageX - left - offset, ctrl);
+								module.setValue(value);
+							} else {
+								var pos;
+								if (pageX <= left) {
+									value = settings.min;
+									pos = -offset;
+								} else if (pageX >= right) {
+									value = settings.max;
+									pos = right - left - offset;
+								}
+								if (ctrl === rthumb) {
+									rthumbval = value;
+								} else {
+									thumbval = value;
+								}
+								module.setPosition(pos, ctrl);
+								module.setValue(value);
+							} 
 						}
 						var rangeMouseup = function(muEvent) {
 							if(isTouch) {
@@ -192,10 +302,10 @@ $.fn.range = function(parameters) {
 					}
 				},
 				
-				setValuePosition: function(val) {
-					var position = module.determinePosition(val);
-					module.setPosition(position);
-					module.setValue(val);
+				setValuePosition: function(val, ctrl) {
+					var position = module.determinePosition(val, ctrl);
+					module.setPosition(position, ctrl);
+					module.setValue(val, ctrl);
 				},
 				
 				invoke: function(query) {
@@ -203,6 +313,11 @@ $.fn.range = function(parameters) {
 						case 'set value':
 							if(queryArguments.length > 0) {
 								instance.setValuePosition(queryArguments[0]);
+							}
+							break;
+						case 'get value':
+							if(queryArguments.length > 0) {
+								instance.getValue(queryArguments[0]);
 							}
 							break;
 					}
@@ -236,6 +351,7 @@ $.fn.range.settings = {
 	max          : false,
 	step         : 1,
 	start        : 0,
+	values 		 : false,
 	input        : false,
 	
 	onChange     : function(value){},
