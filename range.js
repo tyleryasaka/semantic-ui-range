@@ -127,12 +127,12 @@ $.fn.range = function(parameters) {
 					return Math.round(ratio * $(inner).width()) + $(trackLeft).position().left - offset;
 				},
 
-				setValue: function(newValue) {
+				setValue: function(newValue, triggeredByUser = true) {
 					if(settings.input) {
 						$(settings.input).val(newValue);
 					}
 					if(settings.onChange) {
-						settings.onChange(newValue);
+						settings.onChange(newValue, {triggeredByUser: triggeredByUser});
 					}
 				},
 
@@ -192,17 +192,17 @@ $.fn.range = function(parameters) {
 					}
 				},
 				
-				setValuePosition: function(val) {
+				setValuePosition: function(val, triggeredByUser = true) {
 					var position = module.determinePosition(val);
 					module.setPosition(position);
-					module.setValue(val);
+					module.setValue(val, triggeredByUser);
 				},
 				
 				invoke: function(query) {
 					switch(query) {
 						case 'set value':
 							if(queryArguments.length > 0) {
-								instance.setValuePosition(queryArguments[0]);
+								instance.setValuePosition(queryArguments[0], false);
 							}
 							break;
 					}

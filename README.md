@@ -39,7 +39,10 @@ Notice the settings object you pass into the jQuery function in step 3. There ar
 * start (number; optional) - the initial value of the range (must be between min and max)
 * step (number; optional) - the increment amount between values (defaults to 1)
 * input (string; optional) - A jQuery identifier string (such as '#my-input') to specify an html input to receive the new range value each time it is changed
-* onChange (function; optional) - function to call each time the value of the range changes; a single parameter with the new value is passed to this function
+* onChange (function; optional) - function to call each time the value of the range changes; parameters:
+	* value (number) - the updated value of the slider
+	* meta (object) - a hash with properties:
+		* `triggeredByUser` (boolean). `true` unless the change was triggered programmatically using `set value`. Useful for preventing infinite loops if you are calling a method that will call `set value`.
 
 ## *Getting* the slider value programmatically
 
@@ -61,6 +64,21 @@ You may also set the slider value with jQuery using the 'setValue' query like so
     $('#range').range('set value', 17); // Sets slider with id 'range' to value 17
 
 Note that this will only work on a slider that has already been instantiated.
+
+## Preventing infinite get/set loops
+
+If you're running code in your `onChange` callback that calls the `set value` method, you will encounter an infinite loop. You can prevent this by checking the `triggeredByUser` property.
+
+	$('#range').range({
+		min: 0,
+		max: 100,
+		start: 5,
+		onChange: function(value, meta) {
+			if(meta.triggeredByUser) {
+				// now you can run code that will call `set value`
+			}
+		}
+	});
 
 ## Demo
 
