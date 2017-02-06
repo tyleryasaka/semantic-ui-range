@@ -65,6 +65,21 @@ You may also set the slider value with jQuery using the 'setValue' query like so
 
 Note that this will only work on a slider that has already been instantiated.
 
+## Preventing infinite get/set loops
+
+If you're running code in your `onChange` callback that calls the `set value` method, you will encounter an infinite loop. You can prevent this by checking the `triggeredByUser` property.
+
+	$('#range').range({
+		min: 0,
+		max: 100,
+		start: 5,
+		onChange: function(value, meta) {
+			if(meta.triggeredByUser) {
+				// now you can run code that will call `set value`
+			}
+		}
+	});
+
 ## Demo
 
 Check out the [demo](http://codepen.io/tyleryasaka/pen/KVqPbo) for examples.
