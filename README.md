@@ -13,6 +13,11 @@ The range slider is responsive and works for both mouse and touchscreen on all t
 
 Add the range.js and range.css files from this repo to your project.
 
+Alternatively, you can install using Bower:
+```
+bower install tyleryasaka/semantic-ui-range --save
+```
+
 ###Step 2
 
 Add the range slider html.
