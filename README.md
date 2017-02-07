@@ -3,7 +3,7 @@ Add-on range slider for Semantic UI
 
 [Demo](http://codepen.io/tyleryasaka/pen/KVqPbo)
 
-I created the range slider for Semantic UI when I found that one currently did not exist.
+I created the range slider for [Semantic UI](http://semantic-ui.com/) when I found that one currently did not exist.
 
 The range slider is responsive and works for both mouse and touchscreen on all the devices it has been tested on. It uses standard css/javascript (no hacks) so it should render well on just about any remotely modern device. That said I have not thoroughly tested it, so let me know if you encounter any bugs.
 
