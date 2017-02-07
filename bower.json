@@ -1,13 +1,13 @@
 {
-  "name"        : "semantic",
-  "description" : "Semantic empowers designers and developers by creating a shared vocabulary for UI.",
-  "homepage"    : "http://www.semantic-ui.com",
+  "name"        : "semantic-ui-range",
+  "description" : "Add-on range slider for Semantic UI",
+  "homepage"    : "https://github.com/tyleryasaka/semantic-ui-range",
   "author": {
-    "name" : "Jack Lukic",
-    "web"  : "http://www.jacklukic.com"
+    "name" : "Tyler Yasaka",
+    "web"  : "https://tyleryasaka.me/"
   },
   "dependencies": {
-    "jquery"      : ">=1.8"
+    "semantic"      : ">=2.2.0"
   },
   "main": [
     "range.css",
@@ -17,7 +17,8 @@
     "semantic",
     "ui",
     "css3",
-    "framework"
+    "range",
+    "slider"
   ],
   "license" : "MIT"
 }
