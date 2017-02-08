@@ -20,9 +20,15 @@ bower install tyleryasaka/semantic-ui-range --save
 
 ###Step 2
 
-Add the range slider html.
+Add the range slider html (slider may be horizontal or vertical).
+
+#### Horizontal (default)
 
 	<div class="ui range" id="my-range"></div>
+
+#### Vertical
+
+    <div class="ui range vertical" id="my-range"></div>
 
 ###Step 3
 
