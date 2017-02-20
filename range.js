@@ -66,7 +66,11 @@ $.fn.range = function(parameters) {
 					// determine if slider is vertical
 					vertical = ($module.hasClass('vertical')) ? true : false;
 					$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div></div>");
-					if (vertical) $(element).css('transform', 'rotate(-90deg)');
+					if (vertical) {
+						var $inner = $('.ui.range .inner');
+						$inner.css('height', $inner.width() + 'px');
+						$(element).css('transform', 'rotate(-90deg)');
+					}
 					inner = $(element).children('.inner')[0];
 					thumb = $(element).find('.thumb')[0];
 					trackLeft = $(element).find('.track-fill')[0];
