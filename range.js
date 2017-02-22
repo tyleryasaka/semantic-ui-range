@@ -68,7 +68,13 @@ $.fn.range = function(parameters) {
 					$(element).html("<div class='inner'><div class='track'></div><div class='track-fill'></div><div class='thumb'></div></div>");
 					if (vertical) {
 						var $inner = $('.ui.range .inner');
-						$inner.css('height', $inner.width() + 'px');
+						// there's no jQuery 2.3.x so indexOf '3.' will work without false positive
+						if (jQuery.fn.jquery.indexOf('3.') === -1) {
+							// as jQuery < 3 doesn't handle proper size after css rotation
+							// manually update height to match new width
+							// there's a drawback: the slider is also triggered when clicked on its side
+							$inner.css('height', $inner.width() + 'px');
+						}
 						$(element).css('transform', 'rotate(-90deg)');
 					}
 					inner = $(element).children('.inner')[0];
