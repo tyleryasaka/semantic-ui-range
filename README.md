@@ -88,3 +88,9 @@ If you're running code in your `onChange` callback that calls the `set value` me
 ## Demo
 
 Check out the [demo](http://codepen.io/tyleryasaka/pen/KVqPbo) for examples.
+
+## Vertical Slider
+
+I haven't had time to develop new features, but [Buzut](https://github.com/Buzut) has added the ability to make the slider vertical:
+
+https://github.com/Buzut/semantic-ui-range
