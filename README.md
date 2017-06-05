@@ -7,9 +7,9 @@ I created the range slider for [Semantic UI](http://semantic-ui.com/) when I fou
 
 The range slider is responsive and works for both mouse and touchscreen on all the devices it has been tested on. It uses standard css/javascript (no hacks) so it should render well on just about any remotely modern device. That said I have not thoroughly tested it, so let me know if you encounter any bugs.
 
-##Usage
+## Usage
 
-###Step 1
+### Step 1
 
 Add the range.js and range.css files from this repo to your project.
 
@@ -18,13 +18,13 @@ Alternatively, you can install using Bower:
 bower install tyleryasaka/semantic-ui-range --save
 ```
 
-###Step 2
+### Step 2
 
 Add the range slider html.
 
 	<div class="ui range" id="my-range"></div>
 
-###Step 3
+### Step 3
 
 Instantiate the range slider with jQuery:
 
