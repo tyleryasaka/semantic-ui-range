@@ -3,7 +3,7 @@ Add-on range slider for Semantic UI
 
 [Demo](http://codepen.io/tyleryasaka/pen/KVqPbo)
 
-I created the range slider for Semantic UI when I found that one currently did not exist.
+I created the range slider for [Semantic UI](http://semantic-ui.com/) when I found that one currently did not exist.
 
 The range slider is responsive and works for both mouse and touchscreen on all the devices it has been tested on. It uses standard css/javascript (no hacks) so it should render well on just about any remotely modern device. That said I have not thoroughly tested it, so let me know if you encounter any bugs.
 
@@ -12,6 +12,11 @@ The range slider is responsive and works for both mouse and touchscreen on all t
 ###Step 1
 
 Add the range.js and range.css files from this repo to your project.
+
+Alternatively, you can install using Bower:
+```
+bower install tyleryasaka/semantic-ui-range --save
+```
 
 ###Step 2
 
@@ -83,3 +88,9 @@ If you're running code in your `onChange` callback that calls the `set value` me
 ## Demo
 
 Check out the [demo](http://codepen.io/tyleryasaka/pen/KVqPbo) for examples.
+
+## Vertical Slider
+
+I haven't had time to develop new features, but [Buzut](https://github.com/Buzut) has added the ability to make the slider vertical:
+
+https://github.com/Buzut/semantic-ui-range
