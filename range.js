@@ -87,7 +87,7 @@ $.fn.range = function(parameters) {
 					$(element).on('touchstart', function(event, originalEvent) {
 						module.rangeMousedown(event, true, originalEvent);
 					});
-                    module.addVisibilityListener();
+                    module.addVisibilityListener(element);
 				},
 
 				sanitize: function() {
@@ -215,26 +215,24 @@ $.fn.range = function(parameters) {
 					}
 				},
 
-                addVisibilityListener: function() {
+                addVisibilityListener: function(elem) {
 
-                    // Add a mutation observer to detect when root invisible element is behing shown
-                    // in order to initialize the thumb correctly when position and offets are available
+                    // Add a mutation observer (https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
+                    // to detect when root invisible element is behing shown in order to initialize the thumb correctly
+                    // when position and offets are available (https://stackoverflow.com/a/5974377)
 
                     var observer = new MutationObserver(function(mutationList) {
-                        if ($(element).is(':visible')) {
-                            observer.disconnect();
+                        if ($(elem).is(':visible')) {
+                            observer.disconnect(); // Avoid infinite recursion because « module.setValuePosition » will trigger this observer
                             module.setValuePosition(settings.start);
                         }
                     });
 
-                    let closestHiddenParent = $(element).parentsUntil(':visible');
+                    var closestHiddenParent = $(elem).parentsUntil(':visible');
 
-                    observer.observe(closestHiddenParent[closestHiddenParent.length - 1], {
-                        attributes: true,
-                        childList: true,
-                        characterData: true,
-                        subtree: true,
-                    });
+					if (closestHiddenParent.length != 0) {
+						observer.observe(closestHiddenParent[closestHiddenParent.length - 1], {attributes: true});
+					}
                 },
 
 			};
