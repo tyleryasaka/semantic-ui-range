@@ -1,8 +1,8 @@
 /*!
  * # Range slider for Semantic UI.
- * 
+ *
  */
- 
+
 ;(function ( $, window, document, undefined ) {
 
 "use strict";
@@ -11,17 +11,17 @@ $.fn.range = function(parameters) {
 
 	var
 		$allModules    = $(this),
-		
+
 		offset         = 10,
-		
+
 		query          = arguments[0],
     methodInvoked  = (typeof query == 'string'),
     queryArguments = [].slice.call(arguments, 1)
 	;
-	
+
   $allModules
     .each(function() {
-			
+
 			var
 				settings          = ( $.isPlainObject(parameters) )
 					? $.extend(true, {}, $.fn.range.settings, parameters)
@@ -41,22 +41,22 @@ $.fn.range = function(parameters) {
 
 				element         = this,
 				instance        = $module.data(moduleNamespace),
-				
+
 				inner,
 				thumb,
 				trackLeft,
 				precision,
-				
+
 				module
 			;
-			
+
 			module = {
-				
+
 				initialize: function() {
 					module.instantiate();
 					module.sanitize();
 				},
-				
+
 				instantiate: function() {
 					instance = module;
 					$module
@@ -87,6 +87,7 @@ $.fn.range = function(parameters) {
 					$(element).on('touchstart', function(event, originalEvent) {
 						module.rangeMousedown(event, true, originalEvent);
 					});
+                    module.addVisibilityListener(element);
 				},
 
 				sanitize: function() {
@@ -111,7 +112,7 @@ $.fn.range = function(parameters) {
 					}
 					precision = Math.pow(10, decimalPlaces);
 				},
-				
+
 				determineValue: function(startPos, endPos, currentPos) {
 					var ratio = (currentPos - startPos) / (endPos - startPos);
 					var range = settings.max - settings.min;
@@ -194,7 +195,7 @@ $.fn.range = function(parameters) {
 						}
 					}
 				},
-				
+
 				setValuePosition: function(val, triggeredByUser) {
 					if(typeof triggeredByUser === 'undefined') {
 						triggeredByUser = true;
@@ -203,7 +204,7 @@ $.fn.range = function(parameters) {
 					module.setPosition(position);
 					module.setValue(val, triggeredByUser);
 				},
-				
+
 				invoke: function(query) {
 					switch(query) {
 						case 'set value':
@@ -213,9 +214,29 @@ $.fn.range = function(parameters) {
 							break;
 					}
 				},
-			
+
+                addVisibilityListener: function(elem) {
+
+                    // Add a mutation observer (https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
+                    // to detect when root invisible element is behing shown in order to initialize the thumb correctly
+                    // when position and offets are available (https://stackoverflow.com/a/5974377)
+
+                    var observer = new MutationObserver(function(mutationList) {
+                        if ($(elem).is(':visible')) {
+                            observer.disconnect(); // Avoid infinite recursion because « module.setValuePosition » will trigger this observer
+                            module.setValuePosition(settings.start);
+                        }
+                    });
+
+                    var closestHiddenParent = $(elem).parentsUntil(':visible');
+
+					if (closestHiddenParent.length != 0) {
+						observer.observe(closestHiddenParent[closestHiddenParent.length - 1], {attributes: true});
+					}
+                },
+
 			};
-			
+
       if(methodInvoked) {
         if(instance === undefined) {
           module.initialize();
@@ -225,10 +246,10 @@ $.fn.range = function(parameters) {
       else {
         module.initialize();
       }
-			
+
     })
   ;
-  
+
   return this;
 
 };
@@ -243,7 +264,7 @@ $.fn.range.settings = {
 	step         : 1,
 	start        : 0,
 	input        : false,
-	
+
 	onChange     : function(value){},
 
 };
