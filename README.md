@@ -1,3 +1,5 @@
+*This repo is no longer maintained. For something more up-do-date, I recommend checking out [Fomantic-UI](https://github.com/fomantic/Fomantic-UI/pull/290).*
+
 # semantic-ui-range
 Add-on range slider for Semantic UI
 
